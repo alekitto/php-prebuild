@@ -54,6 +54,11 @@ fi
 export PHP_BUILD_CONFIGURE_OPTS="--disable-intl --disable-cgi --disable-fpm" PHP_BUILD_XDEBUG_ENABLE=off
 
 echo "Building ${NAME} ${VERSION} for ${CODENAME}"
+if [[ "${CODENAME}" == "jammy" && "${VERSION:0:3}" == "8.0" ]]; then
+  /php-build/build-openssl-1.0.sh
+  export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/local/opt/openssl@1.0/lib/pkgconfig"
+fi
+
 php-build ${BUILD_ARGS} "${VERSION}" "/usr/local/${NAME}/${VERSION}"
 
 /usr/local/${NAME}/"${VERSION}"/bin/php --info
